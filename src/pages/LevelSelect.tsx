@@ -8,7 +8,7 @@ import { Lightbulb } from "lucide-react";
 
 const LevelSelect = () => {
   const { isLevelCompleted, resetProgress } = useGameProgress();
-  const { hintCount, resetHints } = useHintSystem();
+  const { hintCounts, resetHints } = useHintSystem();
 
   const easyLevels = levels.filter((l) => l.difficulty === 'easy');
   const mediumLevels = levels.filter((l) => l.difficulty === 'medium');
@@ -22,9 +22,19 @@ const LevelSelect = () => {
             Single Line Draw
           </h1>
           <p className="text-gray-400 mt-2">Connect all the dots with a single line.</p>
-          <div className="mt-4 flex items-center justify-center gap-2 text-lg text-yellow-400">
-            <Lightbulb className="h-5 w-5" />
-            <span>{hintCount} Hints Available</span>
+          <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 text-lg text-yellow-400">
+            <div className="flex items-center gap-2">
+              <Lightbulb className="h-5 w-5" />
+              <span>Easy: {hintCounts.easy}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Lightbulb className="h-5 w-5" />
+              <span>Medium: {hintCounts.medium}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Lightbulb className="h-5 w-5" />
+              <span>Hard: {hintCounts.hard}</span>
+            </div>
           </div>
         </header>
 

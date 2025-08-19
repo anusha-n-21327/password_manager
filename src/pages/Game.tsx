@@ -13,11 +13,12 @@ const Game = () => {
   const { levelId } = useParams();
   const navigate = useNavigate();
   const { markLevelAsCompleted } = useGameProgress();
-  const { hintCount, useHint } = useHintSystem();
+  const { hintCounts, useHint } = useHintSystem();
   const [gameKey, setGameKey] = useState(0);
   const [hintTrigger, setHintTrigger] = useState(0);
 
   const level = getLevelById(Number(levelId));
+  const currentHintCount = level ? hintCounts[level.difficulty] : 0;
 
   useEffect(() => {
     if (!level) {
@@ -39,8 +40,8 @@ const Game = () => {
   };
 
   const handleHint = () => {
-    if (hintCount > 0) {
-      useHint();
+    if (level && currentHintCount > 0) {
+      useHint(level.difficulty);
       setHintTrigger(prev => prev + 1);
     }
   };
@@ -60,11 +61,11 @@ const Game = () => {
             </Button>
             <CardTitle className="text-2xl text-cyan-400">Level {level.id}</CardTitle>
             <div className="flex items-center gap-1">
-              <Button variant="ghost" size="icon" onClick={handleHint} disabled={hintCount === 0}>
+              <Button variant="ghost" size="icon" onClick={handleHint} disabled={currentHintCount === 0}>
                 <Lightbulb className="h-5 w-5 text-yellow-400" />
                 <span className="sr-only">Get Hint</span>
               </Button>
-              <span className="text-sm text-yellow-400 w-10 text-left">({hintCount})</span>
+              <span className="text-sm text-yellow-400 w-10 text-left">({currentHintCount})</span>
               <Button variant="ghost" size="icon" onClick={handleReset}>
                 <RotateCcw className="h-5 w-5" />
                 <span className="sr-only">Reset level</span>
