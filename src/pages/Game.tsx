@@ -5,14 +5,17 @@ import { GameGrid } from '@/components/GameGrid';
 import { useGameProgress } from '@/hooks/useGameProgress';
 import { showSuccess } from '@/utils/toast';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, RotateCcw } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Lightbulb } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useHintSystem } from '@/hooks/useHintSystem';
 
 const Game = () => {
   const { levelId } = useParams();
   const navigate = useNavigate();
   const { markLevelAsCompleted } = useGameProgress();
+  const { hintCount, useHint } = useHintSystem();
   const [gameKey, setGameKey] = useState(0);
+  const [hintTrigger, setHintTrigger] = useState(0);
 
   const level = getLevelById(Number(levelId));
 
@@ -32,6 +35,14 @@ const Game = () => {
   
   const handleReset = () => {
     setGameKey(prev => prev + 1);
+    setHintTrigger(0);
+  };
+
+  const handleHint = () => {
+    if (hintCount > 0) {
+      useHint();
+      setHintTrigger(prev => prev + 1);
+    }
   };
 
   if (!level) {
@@ -48,14 +59,21 @@ const Game = () => {
               <span className="sr-only">Back to levels</span>
             </Button>
             <CardTitle className="text-2xl text-cyan-400">Level {level.id}</CardTitle>
-            <Button variant="ghost" size="icon" onClick={handleReset}>
-              <RotateCcw className="h-5 w-5" />
-              <span className="sr-only">Reset level</span>
-            </Button>
+            <div className="flex items-center gap-1">
+              <Button variant="ghost" size="icon" onClick={handleHint} disabled={hintCount === 0}>
+                <Lightbulb className="h-5 w-5 text-yellow-400" />
+                <span className="sr-only">Get Hint</span>
+              </Button>
+              <span className="text-sm text-yellow-400 w-10 text-left">({hintCount})</span>
+              <Button variant="ghost" size="icon" onClick={handleReset}>
+                <RotateCcw className="h-5 w-5" />
+                <span className="sr-only">Reset level</span>
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
-          <GameGrid key={gameKey} level={level} onComplete={handleComplete} />
+          <GameGrid key={gameKey} level={level} onComplete={handleComplete} hintTrigger={hintTrigger} />
         </CardContent>
       </Card>
     </div>

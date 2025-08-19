@@ -3,9 +3,12 @@ import { useGameProgress } from "@/hooks/useGameProgress";
 import { LevelCard } from "@/components/LevelCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { useHintSystem } from "@/hooks/useHintSystem";
+import { Lightbulb } from "lucide-react";
 
 const LevelSelect = () => {
   const { isLevelCompleted, resetProgress } = useGameProgress();
+  const { hintCount, resetHints } = useHintSystem();
 
   const easyLevels = levels.filter((l) => l.difficulty === 'easy');
   const mediumLevels = levels.filter((l) => l.difficulty === 'medium');
@@ -19,6 +22,10 @@ const LevelSelect = () => {
             Single Line Draw
           </h1>
           <p className="text-gray-400 mt-2">Connect all the dots with a single line.</p>
+          <div className="mt-4 flex items-center justify-center gap-2 text-lg text-yellow-400">
+            <Lightbulb className="h-5 w-5" />
+            <span>{hintCount} Hints Available</span>
+          </div>
         </header>
 
         <Tabs defaultValue="easy" className="w-full">
@@ -52,8 +59,9 @@ const LevelSelect = () => {
         
         <div className="mt-8 text-center">
           <Button variant="destructive" onClick={() => {
-            if (window.confirm("Are you sure you want to reset all your progress?")) {
+            if (window.confirm("Are you sure you want to reset all your progress and hints?")) {
               resetProgress();
+              resetHints();
             }
           }}>
             Reset Progress

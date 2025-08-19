@@ -5,16 +5,18 @@ import { cn } from '@/lib/utils';
 interface GameGridProps {
   level: Level;
   onComplete: () => void;
+  hintTrigger: number;
 }
 
 const PADDING = 50;
 const STROKE_WIDTH = 8;
 
-export const GameGrid = ({ level, onComplete }: GameGridProps) => {
+export const GameGrid = ({ level, onComplete, hintTrigger }: GameGridProps) => {
   const [path, setPath] = useState<number[]>([]);
   const [isDrawing, setIsDrawing] = useState(false);
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const [revealedHints, setRevealedHints] = useState<[number, number][]>([]);
 
   const { gridSize, points, connections } = level;
 
@@ -44,6 +46,26 @@ export const GameGrid = ({ level, onComplete }: GameGridProps) => {
       onComplete();
     }
   }, [drawnConnections, connections, onComplete]);
+
+  useEffect(() => {
+    if (hintTrigger > 0 && hintTrigger > revealedHints.length) {
+      const allDrawnKeys = new Set<string>();
+      drawnConnections.forEach(key => allDrawnKeys.add(key));
+      revealedHints.forEach(hint => {
+        const key = [...hint].sort().join('-');
+        allDrawnKeys.add(key);
+      });
+
+      const potentialHints = connections.filter(conn => {
+        const key = [...conn].sort().join('-');
+        return !allDrawnKeys.has(key);
+      });
+
+      if (potentialHints.length > 0) {
+        setRevealedHints(prev => [...prev, potentialHints[0]]);
+      }
+    }
+  }, [hintTrigger, connections, drawnConnections, revealedHints.length]);
 
   const getPointIndexFromCoords = (x: number, y: number) => {
     if (!svgRef.current) return -1;
@@ -127,6 +149,23 @@ export const GameGrid = ({ level, onComplete }: GameGridProps) => {
               x2={end.x}
               y2={end.y}
               stroke="hsl(220 13% 31%)"
+              strokeWidth={STROKE_WIDTH}
+              strokeLinecap="round"
+            />
+          );
+        })}
+
+        {revealedHints.map((hint, i) => {
+          const start = getCanvasCoords(points[hint[0]]);
+          const end = getCanvasCoords(points[hint[1]]);
+          return (
+            <line
+              key={`hint-${i}`}
+              x1={start.x}
+              y1={start.y}
+              x2={end.x}
+              y2={end.y}
+              className="stroke-yellow-500/50"
               strokeWidth={STROKE_WIDTH}
               strokeLinecap="round"
             />
