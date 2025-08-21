@@ -1,29 +1,23 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LevelSelect from "./pages/LevelSelect";
-import NotFound from "./pages/NotFound";
-import Game from "./pages/Game";
+import { VaultProvider, useVault } from './context/VaultContext';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
 
-const queryClient = new QueryClient();
+const AppContent = () => {
+  const { isUnlocked } = useVault();
+  return isUnlocked ? <Dashboard /> : <Login />;
+};
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LevelSelect />} />
-          <Route path="/play/:levelId" element={<Game />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <TooltipProvider>
+    <Toaster />
+    <Sonner />
+    <VaultProvider>
+      <AppContent />
+    </VaultProvider>
+  </TooltipProvider>
 );
 
 export default App;
