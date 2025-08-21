@@ -37,7 +37,7 @@ export const AddAccountDialog = () => {
           Add Account
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-gray-800 border-gray-700 text-white">
+      <DialogContent className="sm:max-w-md bg-gray-800 border-gray-700 text-white">
         <DialogHeader>
           <DialogTitle className="text-cyan-400">Add New Account</DialogTitle>
           <DialogDescription className="text-gray-400">
@@ -53,7 +53,7 @@ export const AddAccountDialog = () => {
               id="name"
               value={accountName}
               onChange={(e) => setAccountName(e.target.value)}
-              className="col-span-3 bg-gray-900 border-gray-600"
+              className="col-span-3 bg-gray-900 border-gray-600 h-11 text-base"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -65,7 +65,7 @@ export const AddAccountDialog = () => {
               type="text"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="col-span-3 bg-gray-900 border-gray-600"
+              className="col-span-3 bg-gray-900 border-gray-600 h-11 text-base"
             />
           </div>
           <div className="col-start-2 col-span-3">
