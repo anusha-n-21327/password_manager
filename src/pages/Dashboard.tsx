@@ -4,6 +4,7 @@ import { Header } from '@/components/Header';
 import { PasswordTable } from '@/components/PasswordTable';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { AddPasswordForm } from '@/components/AddPasswordForm';
+import { Footer } from '@/components/Footer';
 
 const Dashboard = () => {
   const { accounts } = useVault();
@@ -11,8 +12,8 @@ const Dashboard = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-4 sm:p-8">
-      <div className="max-w-6xl mx-auto opacity-0 animate-fade-in">
+    <div className="min-h-screen bg-background text-foreground p-4 sm:p-8 flex flex-col">
+      <div className="max-w-6xl mx-auto opacity-0 animate-fade-in w-full flex-grow">
         <Header
           onAddClick={() => setIsAddDialogOpen(true)}
           onSearch={setSearchTerm}
@@ -31,6 +32,7 @@ const Dashboard = () => {
           <AddPasswordForm onSave={() => setIsAddDialogOpen(false)} />
         </DialogContent>
       </Dialog>
+      <Footer />
     </div>
   );
 };
