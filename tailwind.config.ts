@@ -20,9 +20,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["'Inter'", ...defaultTheme.fontFamily.sans],
-        heading: ["'Poppins'", ...defaultTheme.fontFamily.sans],
-        mono: ["'Fira Code'", ...defaultTheme.fontFamily.mono],
+        sans: ["'Open Sans'", ...defaultTheme.fontFamily.sans],
+        heading: ["'Lato'", ...defaultTheme.fontFamily.sans],
+        mono: ["'Roboto Mono'", ...defaultTheme.fontFamily.mono],
       },
       colors: {
         border: "hsl(var(--border))",

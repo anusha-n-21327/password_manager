@@ -56,7 +56,7 @@ export const AddPasswordForm = ({ onSave }: AddPasswordFormProps) => {
       </div>
       <Button 
         type="submit" 
-        className="w-full bg-gradient-to-r from-secondary to-primary text-primary-foreground hover:shadow-[0_0_15px_hsl(var(--primary))] transition-shadow"
+        className="w-full bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:shadow-[0_0_15px_hsl(var(--secondary))] transition-shadow"
       >
         <Save className="h-4 w-4 mr-2" /> Save Password
       </Button>

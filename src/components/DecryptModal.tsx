@@ -85,7 +85,7 @@ export const DecryptModal = ({ isOpen, onClose, onCopySuccess, accountToVerify, 
               </div>
               <Button 
                 type="submit" 
-                className="w-full bg-gradient-to-r from-secondary to-primary text-primary-foreground hover:shadow-[0_0_15px_hsl(var(--primary))] transition-shadow"
+                className="w-full bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:shadow-[0_0_15px_hsl(var(--secondary))] transition-shadow"
               >
                 Confirm
               </Button>
