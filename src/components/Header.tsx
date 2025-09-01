@@ -12,8 +12,7 @@ export const Header = ({ onViewChange, onSearch }: HeaderProps) => {
   const { logout } = useVault();
 
   return (
-    <header className="bg-card p-4 rounded-lg mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
-      <h1 className="text-2xl font-bold text-primary">Password Manager</h1>
+    <header className="bg-card p-4 rounded-lg mb-8 flex flex-col md:flex-row items-center justify-end gap-4">
       <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
         <div className="relative w-full md:w-auto">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
