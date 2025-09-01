@@ -23,8 +23,8 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
 
   const filteredAccounts = accounts.filter(
     (account) =>
-      account.website.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      account.username.toLowerCase().includes(searchTerm.toLowerCase())
+      (account.website && typeof account.website === 'string' && account.website.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (account.username && typeof account.username === 'string' && account.username.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const handleCopySuccess = (password: string) => {
@@ -118,7 +118,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
             <DialogHeader>
               <DialogTitle className="text-primary">Edit Account</DialogTitle>
               <DialogDescription>Make changes to your saved account details.</DialogDescription>
-            </DialogHeader>
+            </Header>
             <EditPasswordForm 
               account={editState.account} 
               onSave={() => setEditState({ open: false, account: null })} 

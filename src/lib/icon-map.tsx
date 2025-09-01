@@ -52,6 +52,9 @@ const iconMap: { [key: string]: React.ElementType } = {
 };
 
 export const getIconForWebsite = (website: string): React.ElementType => {
+  if (typeof website !== 'string' || !website) {
+    return Globe;
+  }
   const lowerCaseWebsite = website.toLowerCase();
   for (const key in iconMap) {
     if (lowerCaseWebsite.includes(key)) {
