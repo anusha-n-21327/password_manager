@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import React from 'react';
 import { Account, useVault } from '@/context/VaultContext';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -8,6 +9,7 @@ import { EditPasswordForm } from './EditPasswordForm';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Copy, Lock, Trash2, Pencil } from 'lucide-react';
 import { showSuccess } from '@/utils/toast';
+import { getIconForWebsite } from '@/lib/icon-map';
 
 interface PasswordTableProps {
   accounts: Account[];
@@ -61,33 +63,41 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredAccounts.map((account, index) => (
-              <TableRow 
-                key={account.id} 
-                className="border-b-primary/20 hover:bg-primary/5 opacity-0 animate-fade-in-up"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <TableCell className="font-medium">{account.website}</TableCell>
-                <TableCell className="text-muted-foreground">{account.username}</TableCell>
-                <TableCell className="font-mono tracking-wider text-primary">
-                  {'••••••••••••'}
-                </TableCell>
-                <TableCell className="text-right">
-                  <Button variant="ghost" size="icon" onClick={() => openModal(account, 'decrypt')} className="group hover:text-black transition-colors">
-                    <Lock className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
-                  </Button>
-                  <Button variant="ghost" size="icon" onClick={() => openModal(account, 'copy')} className="group hover:text-black transition-colors">
-                    <Copy className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
-                  </Button>
-                  <Button variant="ghost" size="icon" onClick={() => openEditDialog(account)} className="group hover:text-black transition-colors">
-                    <Pencil className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
-                  </Button>
-                  <Button variant="ghost" size="icon" onClick={() => deleteAccount(account.id)} className="group hover:text-black transition-colors">
-                    <Trash2 className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {filteredAccounts.map((account, index) => {
+              const Icon = getIconForWebsite(account.website);
+              return (
+                <TableRow 
+                  key={account.id} 
+                  className="border-b-primary/20 hover:bg-primary/5 opacity-0 animate-fade-in-up"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <TableCell className="font-medium">
+                    <div className="flex items-center gap-3">
+                      <Icon className="h-5 w-5 text-primary flex-shrink-0" />
+                      <span>{account.website}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">{account.username}</TableCell>
+                  <TableCell className="font-mono tracking-wider text-primary">
+                    {'••••••••••••'}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="ghost" size="icon" onClick={() => openModal(account, 'decrypt')} className="group hover:text-black transition-colors">
+                      <Lock className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => openModal(account, 'copy')} className="group hover:text-black transition-colors">
+                      <Copy className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => openEditDialog(account)} className="group hover:text-black transition-colors">
+                      <Pencil className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => deleteAccount(account.id)} className="group hover:text-black transition-colors">
+                      <Trash2 className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </Card>
