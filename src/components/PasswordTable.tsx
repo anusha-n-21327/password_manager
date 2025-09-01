@@ -14,7 +14,6 @@ interface PasswordTableProps {
 
 export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
   const { deleteAccount } = useVault();
-  const [decryptedPasswords, setDecryptedPasswords] = useState<Record<string, string>>({});
   const [modalState, setModalState] = useState<{ open: boolean; account: Account | null; action: 'decrypt' | 'copy' }>({ open: false, account: null, action: 'decrypt' });
 
   const filteredAccounts = accounts.filter(
@@ -23,17 +22,10 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
       account.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleDecryptSuccess = (password: string) => {
-    if (!modalState.account) return;
-
-    if (modalState.action === 'decrypt') {
-      setDecryptedPasswords(prev => ({ ...prev, [modalState.account!.id]: password }));
-      showSuccess('Password decrypted.');
-    } else if (modalState.action === 'copy') {
-      navigator.clipboard.writeText(password);
-      showSuccess('Password copied to clipboard!');
-    }
-    setModalState({ open: false, account: null, action: 'decrypt' });
+  const handleCopySuccess = (password: string) => {
+    navigator.clipboard.writeText(password);
+    showSuccess('Password copied to clipboard!');
+    setModalState({ open: false, account: null, action: 'decrypt' }); // Close modal
   };
 
   const openModal = (account: Account, action: 'decrypt' | 'copy') => {
@@ -67,7 +59,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
                 <TableCell className="font-medium">{account.website}</TableCell>
                 <TableCell className="text-muted-foreground">{account.username}</TableCell>
                 <TableCell className="font-mono tracking-wider text-primary">
-                  {decryptedPasswords[account.id] || '••••••••••••'}
+                  {'••••••••••••'}
                 </TableCell>
                 <TableCell className="text-right">
                   <Button variant="ghost" size="icon" onClick={() => openModal(account, 'decrypt')} className="hover:text-primary transition-colors">
@@ -89,8 +81,9 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
         <DecryptModal
           isOpen={modalState.open}
           onClose={() => setModalState({ ...modalState, open: false })}
-          onSuccess={handleDecryptSuccess}
+          onSuccess={handleCopySuccess}
           accountToVerify={modalState.account}
+          action={modalState.action}
         />
       )}
     </>
