@@ -8,7 +8,7 @@ import { KeyRound, Eye, EyeOff } from 'lucide-react';
 const Login = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const { login, vaultExists } = useVault();
+  const { login, vaultExists, resetVault } = useVault();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,6 +59,13 @@ const Login = () => {
               {vaultExists ? 'Unlock' : 'Create'}
             </Button>
           </form>
+          {vaultExists && (
+            <div className="mt-4 text-center">
+              <Button variant="link" className="text-sm text-muted-foreground" onClick={resetVault}>
+                Forgot Password? Reset Vault
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

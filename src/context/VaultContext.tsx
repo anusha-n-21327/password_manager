@@ -17,6 +17,7 @@ interface VaultContextType {
   logout: () => void;
   addAccount: (account: Omit<Account, 'id'>) => void;
   deleteAccount: (id: string) => void;
+  resetVault: () => void;
 }
 
 const VaultContext = createContext<VaultContextType | undefined>(undefined);
@@ -76,6 +77,15 @@ export const VaultProvider = ({ children }: { children: ReactNode }) => {
     showSuccess('Account deleted.');
   };
 
+  const resetVault = () => {
+    localStorage.removeItem('password-manager-vault');
+    setIsUnlocked(false);
+    setAccounts([]);
+    setMasterPassword('');
+    setVaultExists(false);
+    showSuccess('Vault has been reset. You can now create a new one.');
+  };
+
   const value = {
     isUnlocked,
     accounts,
@@ -84,6 +94,7 @@ export const VaultProvider = ({ children }: { children: ReactNode }) => {
     logout,
     addAccount,
     deleteAccount,
+    resetVault,
   };
 
   return <VaultContext.Provider value={value}>{children}</VaultContext.Provider>;
