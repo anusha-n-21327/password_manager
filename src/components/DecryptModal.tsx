@@ -55,7 +55,7 @@ export const DecryptModal = ({ isOpen, onClose, onCopySuccess, accountToVerify, 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] bg-card border-primary/20">
+      <DialogContent className="sm:max-w-[425px] bg-card border-primary/20 animate-scale-in">
         {!decryptedPassword ? (
           <>
             <DialogHeader>

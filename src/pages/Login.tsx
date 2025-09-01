@@ -21,7 +21,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-      <Card className="w-full max-w-sm bg-card border-primary/20">
+      <Card className="w-full max-w-sm bg-card border-primary/20 animate-fade-in-up">
         <CardHeader className="text-center">
           <div className="mx-auto bg-background rounded-full p-3 w-fit mb-4 border border-primary/30">
             <KeyRound className="h-8 w-8 text-primary" />

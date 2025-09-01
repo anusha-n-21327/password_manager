@@ -61,8 +61,12 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredAccounts.map((account) => (
-              <TableRow key={account.id} className="border-b-primary/20 hover:bg-primary/5">
+            {filteredAccounts.map((account, index) => (
+              <TableRow 
+                key={account.id} 
+                className="border-b-primary/20 hover:bg-primary/5 opacity-0 animate-fade-in-up"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
                 <TableCell className="font-medium">{account.website}</TableCell>
                 <TableCell className="text-muted-foreground">{account.username}</TableCell>
                 <TableCell className="font-mono tracking-wider text-primary">
@@ -100,7 +104,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
 
       {editState.account && (
         <Dialog open={editState.open} onOpenChange={(isOpen) => setEditState({ ...editState, open: isOpen })}>
-          <DialogContent className="sm:max-w-[425px] bg-card border-primary/20">
+          <DialogContent className="sm:max-w-[425px] bg-card border-primary/20 animate-scale-in">
             <DialogHeader>
               <DialogTitle className="text-primary">Edit Account</DialogTitle>
               <DialogDescription>Make changes to your saved account details.</DialogDescription>
