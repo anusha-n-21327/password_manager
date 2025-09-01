@@ -4,7 +4,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { VaultProvider, useVault } from './context/VaultContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import { ParticlesBackground } from './components/ParticlesBackground';
 
 const AppContent = () => {
   const { isUnlocked } = useVault();
@@ -13,7 +12,6 @@ const AppContent = () => {
 
 const App = () => (
   <>
-    <ParticlesBackground />
     <TooltipProvider>
       <Toaster />
       <Sonner />
