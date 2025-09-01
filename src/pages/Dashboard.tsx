@@ -3,8 +3,20 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogOut, Plus } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { LogOut, Plus, Trash2 } from 'lucide-react';
 import { User } from '@supabase/supabase-js';
+import { showError, showSuccess } from '@/utils/toast';
 
 interface Note {
   id: string;
@@ -17,6 +29,7 @@ const Dashboard = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState('');
   const [loading, setLoading] = useState(true);
+  const [noteToDelete, setNoteToDelete] = useState<Note | null>(null);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -39,6 +52,7 @@ const Dashboard = () => {
       .order('created_at', { ascending: false });
 
     if (error) {
+      showError('Error fetching notes');
       console.error('Error fetching notes:', error);
     } else {
       setNotes(data || []);
@@ -55,11 +69,31 @@ const Dashboard = () => {
       .select();
 
     if (error) {
+      showError('Error adding note');
       console.error('Error adding note:', error);
     } else if (data) {
       setNotes([data[0], ...notes]);
       setNewNote('');
+      showSuccess('Note added successfully!');
     }
+  };
+
+  const handleDeleteNote = async () => {
+    if (!noteToDelete) return;
+
+    const { error } = await supabase
+      .from('notes')
+      .delete()
+      .eq('id', noteToDelete.id);
+
+    if (error) {
+      showError('Error deleting note');
+      console.error('Error deleting note:', error);
+    } else {
+      setNotes(notes.filter((note) => note.id !== noteToDelete.id));
+      showSuccess('Note deleted successfully!');
+    }
+    setNoteToDelete(null);
   };
 
   const handleLogout = async () => {
@@ -67,7 +101,7 @@ const Dashboard = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
 
   return (
@@ -106,23 +140,44 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold font-heading">Your Notes</h2>
-            {notes.length > 0 ? (
-              notes.map((note) => (
-                <Card key={note.id} className="bg-card p-4">
-                  <p>{note.content}</p>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    {new Date(note.created_at).toLocaleString()}
-                  </p>
-                </Card>
-              ))
-            ) : (
-              <p className="text-muted-foreground text-center py-8">
-                You don't have any notes yet.
-              </p>
-            )}
-          </div>
+          <AlertDialog onOpenChange={(open) => !open && setNoteToDelete(null)}>
+            <div className="space-y-4">
+              <h2 className="text-xl font-bold font-heading">Your Notes</h2>
+              {notes.length > 0 ? (
+                notes.map((note) => (
+                  <Card key={note.id} className="bg-card p-4 flex justify-between items-start">
+                    <div>
+                      <p className="pr-4">{note.content}</p>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        {new Date(note.created_at).toLocaleString()}
+                      </p>
+                    </div>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="ghost" size="icon" onClick={() => setNoteToDelete(note)}>
+                        <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
+                      </Button>
+                    </AlertDialogTrigger>
+                  </Card>
+                ))
+              ) : (
+                <p className="text-muted-foreground text-center py-8">
+                  You don't have any notes yet.
+                </p>
+              )}
+            </div>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete your note.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDeleteNote}>Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </main>
       </div>
     </div>
