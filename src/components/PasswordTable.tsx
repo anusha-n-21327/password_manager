@@ -44,7 +44,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
   if (filteredAccounts.length === 0) {
     return (
       <div className="text-center py-16 border-2 border-dashed border-primary/20 rounded-lg">
-        <h2 className="text-xl font-semibold text-foreground">Your vault is empty or no results found.</h2>
+        <h2 className="text-xl font-semibold text-foreground font-heading">Your vault is empty or no results found.</h2>
         <p className="text-muted-foreground mt-2">Try adding a new account or refining your search.</p>
       </div>
     );
@@ -56,10 +56,10 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
         <Table>
           <TableHeader>
             <TableRow className="border-b-primary/20">
-              <TableHead className="text-foreground">Website/App</TableHead>
-              <TableHead className="text-foreground">Username</TableHead>
-              <TableHead className="text-foreground">Password</TableHead>
-              <TableHead className="text-right text-foreground">Actions</TableHead>
+              <TableHead className="text-foreground font-heading">Website/App</TableHead>
+              <TableHead className="text-foreground font-heading">Username</TableHead>
+              <TableHead className="text-foreground font-heading">Password</TableHead>
+              <TableHead className="text-right text-foreground font-heading">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -116,7 +116,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
         <Dialog open={editState.open} onOpenChange={(isOpen) => setEditState({ ...editState, open: isOpen })}>
           <DialogContent className="sm:max-w-[425px] bg-card border-primary/20 animate-scale-in">
             <DialogHeader>
-              <DialogTitle className="text-primary">Edit Account</DialogTitle>
+              <DialogTitle className="text-primary font-heading">Edit Account</DialogTitle>
               <DialogDescription>Make changes to your saved account details.</DialogDescription>
             </DialogHeader>
             <EditPasswordForm 

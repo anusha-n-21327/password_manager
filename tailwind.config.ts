@@ -20,8 +20,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["'Inter'", ...defaultTheme.fontFamily.sans],
-        heading: ["'Inter'", ...defaultTheme.fontFamily.sans],
+        sans: ["'Open Sans'", ...defaultTheme.fontFamily.sans],
+        heading: ["'Lato'", ...defaultTheme.fontFamily.sans],
+        mono: ["'JetBrains Mono'", ...defaultTheme.fontFamily.mono],
       },
       colors: {
         border: "hsl(var(--border))",

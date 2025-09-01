@@ -52,7 +52,7 @@ export const EditPasswordForm = ({ account, onSave }: EditPasswordFormProps) => 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="bg-background pr-10"
+            className="bg-background pr-10 font-mono"
           />
           <button
             type="button"

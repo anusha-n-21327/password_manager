@@ -43,7 +43,7 @@ const Login = () => {
                 placeholder="Master Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-background border-primary/30 text-foreground focus:ring-primary pr-10"
+                className="bg-background border-primary/30 text-foreground focus:ring-primary pr-10 font-mono"
                 required
               />
               <button

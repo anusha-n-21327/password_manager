@@ -37,7 +37,7 @@ export const DecryptModal = ({ isOpen, onClose, onCopySuccess, accountToVerify, 
       if (action === 'decrypt') {
         setDecryptedPassword(plainPassword);
       } else {
-        onCopySuccess(plainPassword);
+        onCopySuccess(plainPlainPassword);
       }
     } else {
       showError('Incorrect master password.');
@@ -59,7 +59,7 @@ export const DecryptModal = ({ isOpen, onClose, onCopySuccess, accountToVerify, 
         {!decryptedPassword ? (
           <>
             <DialogHeader>
-              <DialogTitle className="text-primary">Vault Verification</DialogTitle>
+              <DialogTitle className="text-primary font-heading">Vault Verification</DialogTitle>
               <DialogDescription>
                 Please re-enter your master password to proceed.
               </DialogDescription>
@@ -71,7 +71,7 @@ export const DecryptModal = ({ isOpen, onClose, onCopySuccess, accountToVerify, 
                   placeholder="Master Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-background border-primary/30 text-foreground focus:ring-primary pr-10"
+                  className="bg-background border-primary/30 text-foreground focus:ring-primary pr-10 font-mono"
                   required
                   autoFocus
                 />
@@ -91,7 +91,7 @@ export const DecryptModal = ({ isOpen, onClose, onCopySuccess, accountToVerify, 
         ) : (
           <>
             <DialogHeader>
-              <DialogTitle className="text-primary">Decrypted Password</DialogTitle>
+              <DialogTitle className="text-primary font-heading">Decrypted Password</DialogTitle>
               <DialogDescription>
                 For website: {accountToVerify.website}
               </DialogDescription>

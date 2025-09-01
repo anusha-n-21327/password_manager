@@ -25,7 +25,7 @@ const Dashboard = () => {
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
         <DialogContent className="sm:max-w-[425px] bg-card border-primary/20 animate-scale-in">
           <DialogHeader>
-            <DialogTitle className="text-primary">Add New Password</DialogTitle>
+            <DialogTitle className="text-primary font-heading">Add New Password</DialogTitle>
             <DialogDescription>Enter the details for the new account.</DialogDescription>
           </DialogHeader>
           <AddPasswordForm onSave={() => setIsAddDialogOpen(false)} />
