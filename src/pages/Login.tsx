@@ -20,16 +20,16 @@ const Login = () => {
   const toggleShowPassword = () => setShowPassword(!showPassword);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-4">
-      <Card className="w-full max-w-sm bg-gray-800/50 border-gray-700">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+      <Card className="w-full max-w-sm bg-card border-primary/20">
         <CardHeader className="text-center">
-          <div className="mx-auto bg-cyan-900/50 rounded-full p-3 w-fit mb-4">
-            <KeyRound className="h-8 w-8 text-cyan-400" />
+          <div className="mx-auto bg-background rounded-full p-3 w-fit mb-4 border border-primary/30">
+            <KeyRound className="h-8 w-8 text-primary" />
           </div>
-          <CardTitle className="text-2xl text-cyan-400">
+          <CardTitle className="text-2xl text-primary">
             {vaultExists ? 'Unlock Vault' : 'Create Your Vault'}
           </CardTitle>
-          <CardDescription className="text-gray-400">
+          <CardDescription>
             {vaultExists
               ? 'Enter your master password to continue.'
               : 'Choose a strong master password to secure your new vault.'}
@@ -43,19 +43,19 @@ const Login = () => {
                 placeholder="Master Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-gray-900 border-gray-600 text-white focus:ring-cyan-500 pr-10"
+                className="bg-background border-primary/30 text-foreground focus:ring-primary pr-10"
                 required
               />
               <button
                 type="button"
                 onClick={toggleShowPassword}
-                className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 hover:text-white"
+                className="absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground hover:text-foreground"
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
-            <Button type="submit" className="w-full bg-cyan-600 hover:bg-cyan-700">
+            <Button type="submit" className="w-full" variant="secondary">
               {vaultExists ? 'Unlock' : 'Create'}
             </Button>
           </form>

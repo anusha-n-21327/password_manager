@@ -4,8 +4,9 @@ import { showError, showSuccess } from '@/utils/toast';
 
 export interface Account {
   id: string;
-  name: string;
-  value: string;
+  website: string;
+  username: string;
+  password: string;
 }
 
 interface VaultContextType {
