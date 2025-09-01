@@ -19,6 +19,7 @@ interface VaultContextType {
   updateAccount: (updatedAccount: Account) => void;
   deleteAccount: (id: string) => void;
   resetVault: () => void;
+  verifyMasterPassword: (password: string) => boolean;
 }
 
 const VaultContext = createContext<VaultContextType | undefined>(undefined);
@@ -95,6 +96,10 @@ export const VaultProvider = ({ children }: { children: ReactNode }) => {
     showSuccess('Vault has been reset. You can now create a new one.');
   };
 
+  const verifyMasterPassword = (password: string) => {
+    return password === masterPassword;
+  };
+
   const value = {
     isUnlocked,
     accounts,
@@ -105,6 +110,7 @@ export const VaultProvider = ({ children }: { children: ReactNode }) => {
     updateAccount,
     deleteAccount,
     resetVault,
+    verifyMasterPassword,
   };
 
   return <VaultContext.Provider value={value}>{children}</VaultContext.Provider>;

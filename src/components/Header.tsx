@@ -1,15 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useVault } from "@/context/VaultContext";
-import { Plus, List, Search, LogOut } from "lucide-react";
+import { Plus, Search, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface HeaderProps {
-  onViewChange: (view: 'view' | 'add') => void;
+  onAddClick: () => void;
   onSearch: (term: string) => void;
 }
 
-export const Header = ({ onViewChange, onSearch }: HeaderProps) => {
+export const Header = ({ onAddClick, onSearch }: HeaderProps) => {
   const { logout } = useVault();
 
   return (
@@ -19,8 +19,8 @@ export const Header = ({ onViewChange, onSearch }: HeaderProps) => {
           <AvatarFallback className="bg-primary text-primary-foreground">A</AvatarFallback>
         </Avatar>
         <div>
-          <p className="text-sm text-muted-foreground font-heading">Welcome back,</p>
-          <h2 className="font-heading font-bold text-lg text-foreground">Anusha</h2>
+          <p className="text-sm text-muted-foreground">Welcome back,</p>
+          <h2 className="font-bold text-lg text-foreground">Anusha</h2>
         </div>
       </div>
       <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
@@ -34,11 +34,8 @@ export const Header = ({ onViewChange, onSearch }: HeaderProps) => {
           />
         </div>
         <nav className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => onViewChange('add')}>
-            <Plus className="h-4 w-4 mr-2" /> Add
-          </Button>
-          <Button variant="outline" onClick={() => onViewChange('view')}>
-            <List className="h-4 w-4 mr-2" /> View All
+          <Button variant="outline" onClick={onAddClick} className="hover:bg-primary/10 hover:text-primary transition-colors">
+            <Plus className="h-4 w-4 mr-2" /> Add New
           </Button>
           <Button variant="destructive" onClick={logout}>
             <LogOut className="h-4 w-4 mr-2" /> Logout

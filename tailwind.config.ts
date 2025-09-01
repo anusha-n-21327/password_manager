@@ -20,8 +20,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["'Fira Code'", ...defaultTheme.fontFamily.sans],
-        heading: ["'Poppins'", ...defaultTheme.fontFamily.sans],
+        sans: ["'Inter'", ...defaultTheme.fontFamily.sans],
+        heading: ["'Inter'", ...defaultTheme.fontFamily.sans],
       },
       colors: {
         border: "hsl(var(--border))",
