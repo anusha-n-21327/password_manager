@@ -4,7 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card } from '@/components/ui/card';
 import { DecryptModal } from './DecryptModal';
-import { Copy, Lock, Trash2 } from 'lucide-react';
+import { EditPasswordForm } from './EditPasswordForm';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Copy, Lock, Trash2, Pencil } from 'lucide-react';
 import { showSuccess } from '@/utils/toast';
 
 interface PasswordTableProps {
@@ -15,6 +17,7 @@ interface PasswordTableProps {
 export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
   const { deleteAccount } = useVault();
   const [modalState, setModalState] = useState<{ open: boolean; account: Account | null; action: 'decrypt' | 'copy' }>({ open: false, account: null, action: 'decrypt' });
+  const [editState, setEditState] = useState<{ open: boolean; account: Account | null }>({ open: false, account: null });
 
   const filteredAccounts = accounts.filter(
     (account) =>
@@ -30,6 +33,10 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
 
   const openModal = (account: Account, action: 'decrypt' | 'copy') => {
     setModalState({ open: true, account, action });
+  };
+
+  const openEditDialog = (account: Account) => {
+    setEditState({ open: true, account });
   };
 
   if (filteredAccounts.length === 0) {
@@ -62,11 +69,14 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
                   {'••••••••••••'}
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button variant="ghost" size="icon" onClick={() => openModal(account, 'decrypt')} className="hover:text-primary transition-colors">
+                  <Button variant="ghost" size="icon" onClick={() => openModal(account, 'decrypt')} className="hover:text-foreground transition-colors">
                     <Lock className="h-5 w-5" />
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={() => openModal(account, 'copy')} className="hover:text-primary transition-colors">
+                  <Button variant="ghost" size="icon" onClick={() => openModal(account, 'copy')} className="hover:text-foreground transition-colors">
                     <Copy className="h-5 w-5" />
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={() => openEditDialog(account)} className="hover:text-foreground transition-colors">
+                    <Pencil className="h-5 w-5" />
                   </Button>
                   <Button variant="ghost" size="icon" onClick={() => deleteAccount(account.id)} className="hover:text-destructive transition-colors">
                     <Trash2 className="h-5 w-5" />
@@ -77,6 +87,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
           </TableBody>
         </Table>
       </Card>
+      
       {modalState.account && (
         <DecryptModal
           isOpen={modalState.open}
@@ -85,6 +96,21 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
           accountToVerify={modalState.account}
           action={modalState.action}
         />
+      )}
+
+      {editState.account && (
+        <Dialog open={editState.open} onOpenChange={(isOpen) => setEditState({ ...editState, open: isOpen })}>
+          <DialogContent className="sm:max-w-[425px] bg-card border-primary/20">
+            <DialogHeader>
+              <DialogTitle className="text-primary">Edit Account</DialogTitle>
+              <DialogDescription>Make changes to your saved account details.</DialogDescription>
+            </DialogHeader>
+            <EditPasswordForm 
+              account={editState.account} 
+              onSave={() => setEditState({ open: false, account: null })} 
+            />
+          </DialogContent>
+        </Dialog>
       )}
     </>
   );
