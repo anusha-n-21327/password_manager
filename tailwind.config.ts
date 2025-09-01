@@ -21,7 +21,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ["'Inter'", ...defaultTheme.fontFamily.sans],
-        heading: ["'Roboto'", ...defaultTheme.fontFamily.sans],
+        heading: ["'Poppins'", ...defaultTheme.fontFamily.sans],
         mono: ["'Fira Code'", ...defaultTheme.fontFamily.mono],
       },
       colors: {

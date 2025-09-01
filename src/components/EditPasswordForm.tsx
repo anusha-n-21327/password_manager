@@ -63,7 +63,10 @@ export const EditPasswordForm = ({ account, onSave }: EditPasswordFormProps) => 
           </button>
         </div>
       </div>
-      <Button type="submit" variant="secondary" className="w-full">
+      <Button 
+        type="submit" 
+        className="w-full bg-gradient-to-r from-secondary to-primary text-primary-foreground hover:shadow-[0_0_15px_hsl(var(--primary))] transition-shadow"
+      >
         <Save className="h-4 w-4 mr-2" /> Save Changes
       </Button>
     </form>

@@ -37,7 +37,7 @@ export const DecryptModal = ({ isOpen, onClose, onCopySuccess, accountToVerify, 
       if (action === 'decrypt') {
         setDecryptedPassword(plainPassword);
       } else {
-        onCopySuccess(plainPlainPassword);
+        onCopySuccess(plainPassword);
       }
     } else {
       showError('Incorrect master password.');
@@ -83,7 +83,10 @@ export const DecryptModal = ({ isOpen, onClose, onCopySuccess, accountToVerify, 
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
               </div>
-              <Button type="submit" className="w-full" variant="secondary">
+              <Button 
+                type="submit" 
+                className="w-full bg-gradient-to-r from-secondary to-primary text-primary-foreground hover:shadow-[0_0_15px_hsl(var(--primary))] transition-shadow"
+              >
                 Confirm
               </Button>
             </form>
