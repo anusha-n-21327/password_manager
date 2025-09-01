@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Eye, EyeOff, Save, RefreshCw } from 'lucide-react';
+import { Eye, EyeOff, Save } from 'lucide-react';
 
 interface AddPasswordFormProps {
   onSave: () => void;
@@ -16,20 +16,6 @@ export const AddPasswordForm = ({ onSave }: AddPasswordFormProps) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const { addAccount } = useVault();
-
-  const generatePassword = () => {
-    const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
-    const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const numberChars = '01230123456789';
-    const symbolChars = '!@#$%^&*()_+~`|}{[]:;?><,./-=';
-    const charPool = lowerChars + upperChars + numberChars + symbolChars;
-    let newPassword = '';
-    for (let i = 0; i < 16; i++) {
-      const randomIndex = Math.floor(Math.random() * charPool.length);
-      newPassword += charPool[randomIndex];
-    }
-    setPassword(newPassword);
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,14 +61,9 @@ export const AddPasswordForm = ({ onSave }: AddPasswordFormProps) => {
               </button>
             </div>
           </div>
-          <div className="flex gap-4">
-            <Button type="button" variant="outline" onClick={generatePassword} className="flex-1">
-              <RefreshCw className="h-4 w-4 mr-2" /> Generate
-            </Button>
-            <Button type="submit" variant="secondary" className="flex-1">
-              <Save className="h-4 w-4 mr-2" /> Save Password
-            </Button>
-          </div>
+          <Button type="submit" variant="secondary" className="w-full">
+            <Save className="h-4 w-4 mr-2" /> Save Password
+          </Button>
         </form>
       </CardContent>
     </Card>
