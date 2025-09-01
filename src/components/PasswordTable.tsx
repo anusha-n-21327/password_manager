@@ -118,7 +118,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
             <DialogHeader>
               <DialogTitle className="text-primary">Edit Account</DialogTitle>
               <DialogDescription>Make changes to your saved account details.</DialogDescription>
-            </Header>
+            </DialogHeader>
             <EditPasswordForm 
               account={editState.account} 
               onSave={() => setEditState({ open: false, account: null })} 
