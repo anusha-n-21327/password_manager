@@ -27,12 +27,12 @@ const Login = () => {
             <KeyRound className="h-8 w-8 text-primary" />
           </div>
           <CardTitle className="text-2xl text-primary font-heading">
-            {vaultExists ? 'Unlock Vault' : 'Create Your Vault'}
+            Secure Your Digital Life
           </CardTitle>
           <CardDescription>
             {vaultExists
-              ? 'Enter your master password to continue.'
-              : 'Choose a strong master password to secure your new vault.'}
+              ? 'Enter your master password to unlock your encrypted vault.'
+              : 'Create a single master password to protect all your accounts.'}
           </CardDescription>
         </CardHeader>
         <CardContent>

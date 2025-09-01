@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useVault } from "@/context/VaultContext";
-import { Plus, Search, LogOut } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Plus, Search, LogOut, KeyRound } from "lucide-react";
 
 interface HeaderProps {
   onAddClick: () => void;
@@ -15,13 +14,8 @@ export const Header = ({ onAddClick, onSearch }: HeaderProps) => {
   return (
     <header className="bg-card p-4 rounded-lg mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
       <div className="flex items-center gap-3 self-start">
-        <Avatar>
-          <AvatarFallback className="bg-primary text-primary-foreground">A</AvatarFallback>
-        </Avatar>
-        <div>
-          <p className="text-sm text-muted-foreground">Welcome back,</p>
-          <h2 className="font-bold text-lg text-foreground">Anusha</h2>
-        </div>
+        <KeyRound className="h-6 w-6 text-primary" />
+        <h1 className="font-bold text-xl text-foreground">Password Vault</h1>
       </div>
       <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
         <div className="relative w-full md:w-auto">
