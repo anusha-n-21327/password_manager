@@ -16,6 +16,7 @@ interface VaultContextType {
   login: (masterPassword: string) => void;
   logout: () => void;
   addAccount: (account: Omit<Account, 'id'>) => void;
+  updateAccount: (updatedAccount: Account) => void;
   deleteAccount: (id: string) => void;
   resetVault: () => void;
 }
@@ -71,6 +72,14 @@ export const VaultProvider = ({ children }: { children: ReactNode }) => {
     showSuccess('Account added.');
   };
 
+  const updateAccount = (updatedAccount: Account) => {
+    const updatedAccounts = accounts.map(acc =>
+      acc.id === updatedAccount.id ? updatedAccount : acc
+    );
+    saveData(updatedAccounts);
+    showSuccess('Account updated.');
+  };
+
   const deleteAccount = (id: string) => {
     const updatedAccounts = accounts.filter(acc => acc.id !== id);
     saveData(updatedAccounts);
@@ -93,6 +102,7 @@ export const VaultProvider = ({ children }: { children: ReactNode }) => {
     login,
     logout,
     addAccount,
+    updateAccount,
     deleteAccount,
     resetVault,
   };

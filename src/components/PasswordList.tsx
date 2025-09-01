@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { Account, useVault } from '@/context/VaultContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Copy, Trash2, Eye, EyeOff } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { EditPasswordForm } from './EditPasswordForm';
+import { Copy, Trash2, Eye, EyeOff, Pencil } from 'lucide-react';
 import { showSuccess } from '@/utils/toast';
 
 interface PasswordListProps {
@@ -13,6 +15,8 @@ interface PasswordListProps {
 export const PasswordList = ({ accounts, searchTerm }: PasswordListProps) => {
   const { deleteAccount } = useVault();
   const [visiblePasswords, setVisiblePasswords] = useState<string[]>([]);
+  const [editingAccount, setEditingAccount] = useState<Account | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const filteredAccounts = accounts.filter(
     (account) =>
@@ -31,6 +35,11 @@ export const PasswordList = ({ accounts, searchTerm }: PasswordListProps) => {
     );
   };
 
+  const handleEditClick = (account: Account) => {
+    setEditingAccount(account);
+    setIsEditDialogOpen(true);
+  };
+
   if (filteredAccounts.length === 0) {
     return (
       <div className="text-center py-16 border-2 border-dashed border-primary/20 rounded-lg">
@@ -41,35 +50,57 @@ export const PasswordList = ({ accounts, searchTerm }: PasswordListProps) => {
   }
 
   return (
-    <div className="space-y-4">
-      {filteredAccounts.map((account) => (
-        <Card key={account.id} className="bg-card border-primary/20">
-          <CardContent className="p-4 flex items-center justify-between">
-            <div className="flex-1">
-              <h3 className="font-bold text-lg text-foreground">{account.website}</h3>
-              <p className="text-sm text-muted-foreground">{account.username}</p>
-              <p className="text-sm font-mono text-primary mt-2 tracking-wider">
-                {visiblePasswords.includes(account.id) ? account.password : '••••••••••••••••'}
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" onClick={() => togglePasswordVisibility(account.id)}>
-                {visiblePasswords.includes(account.id) ? (
-                  <EyeOff className="h-5 w-5 text-primary" />
-                ) : (
-                  <Eye className="h-5 w-5 text-primary" />
-                )}
-              </Button>
-              <Button variant="ghost" size="icon" onClick={() => handleCopy(account.password)}>
-                <Copy className="h-5 w-5 text-primary" />
-              </Button>
-              <Button variant="ghost" size="icon" onClick={() => deleteAccount(account.id)}>
-                <Trash2 className="h-5 w-5 text-destructive" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
+    <>
+      <div className="space-y-4">
+        {filteredAccounts.map((account) => (
+          <Card key={account.id} className="bg-card border-primary/20">
+            <CardContent className="p-4 flex items-center justify-between">
+              <div className="flex-1">
+                <h3 className="font-bold text-lg text-foreground">{account.website}</h3>
+                <p className="text-sm text-muted-foreground">{account.username}</p>
+                <p className="text-sm font-mono text-primary mt-2 tracking-wider">
+                  {visiblePasswords.includes(account.id) ? account.password : '••••••••••••••••'}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="icon" onClick={() => togglePasswordVisibility(account.id)}>
+                  {visiblePasswords.includes(account.id) ? (
+                    <EyeOff className="h-5 w-5 text-primary" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-primary" />
+                  )}
+                </Button>
+                <Button variant="ghost" size="icon" onClick={() => handleCopy(account.password)}>
+                  <Copy className="h-5 w-5 text-primary" />
+                </Button>
+                <Button variant="ghost" size="icon" onClick={() => handleEditClick(account)}>
+                  <Pencil className="h-5 w-5 text-primary" />
+                </Button>
+                <Button variant="ghost" size="icon" onClick={() => deleteAccount(account.id)}>
+                  <Trash2 className="h-5 w-5 text-destructive" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-[425px] bg-card border-primary/20">
+          <DialogHeader>
+            <DialogTitle className="text-primary">Edit Account</DialogTitle>
+          </DialogHeader>
+          {editingAccount && (
+            <EditPasswordForm
+              account={editingAccount}
+              onSave={() => {
+                setIsEditDialogOpen(false);
+                setEditingAccount(null);
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
