@@ -15,12 +15,7 @@ import {
   Figma,
   Codepen,
   Mail,
-  Amazon,
   Apple,
-  Google,
-  Microsoft,
-  Netflix,
-  Spotify,
 } from 'lucide-react';
 import React from 'react';
 
@@ -41,14 +36,7 @@ const iconMap: { [key: string]: React.ElementType } = {
   codepen: Codepen,
   mail: Mail,
   email: Mail,
-  gmail: Google,
-  outlook: Microsoft,
-  amazon: Amazon,
   apple: Apple,
-  google: Google,
-  microsoft: Microsoft,
-  netflix: Netflix,
-  spotify: Spotify,
 };
 
 export const getIconForWebsite = (website: string): React.ElementType => {
