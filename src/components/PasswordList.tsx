@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { Account, useVault } from '@/context/VaultContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Copy, Trash2 } from 'lucide-react';
+import { Copy, Trash2, Eye, EyeOff } from 'lucide-react';
 import { showSuccess } from '@/utils/toast';
 
 interface PasswordListProps {
@@ -11,6 +12,7 @@ interface PasswordListProps {
 
 export const PasswordList = ({ accounts, searchTerm }: PasswordListProps) => {
   const { deleteAccount } = useVault();
+  const [visiblePasswords, setVisiblePasswords] = useState<string[]>([]);
 
   const filteredAccounts = accounts.filter(
     (account) =>
@@ -21,6 +23,12 @@ export const PasswordList = ({ accounts, searchTerm }: PasswordListProps) => {
   const handleCopy = (password: string) => {
     navigator.clipboard.writeText(password);
     showSuccess('Password copied to clipboard!');
+  };
+
+  const togglePasswordVisibility = (id: string) => {
+    setVisiblePasswords((prev) =>
+      prev.includes(id) ? prev.filter((pId) => pId !== id) : [...prev, id]
+    );
   };
 
   if (filteredAccounts.length === 0) {
@@ -40,8 +48,18 @@ export const PasswordList = ({ accounts, searchTerm }: PasswordListProps) => {
             <div className="flex-1">
               <h3 className="font-bold text-lg text-foreground">{account.website}</h3>
               <p className="text-sm text-muted-foreground">{account.username}</p>
+              <p className="text-sm font-mono text-primary mt-2 tracking-wider">
+                {visiblePasswords.includes(account.id) ? account.password : '••••••••••••••••'}
+              </p>
             </div>
             <div className="flex items-center gap-2">
+              <Button variant="ghost" size="icon" onClick={() => togglePasswordVisibility(account.id)}>
+                {visiblePasswords.includes(account.id) ? (
+                  <EyeOff className="h-5 w-5 text-primary" />
+                ) : (
+                  <Eye className="h-5 w-5 text-primary" />
+                )}
+              </Button>
               <Button variant="ghost" size="icon" onClick={() => handleCopy(account.password)}>
                 <Copy className="h-5 w-5 text-primary" />
               </Button>
