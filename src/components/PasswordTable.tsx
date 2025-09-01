@@ -69,16 +69,16 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
                   {'••••••••••••'}
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button variant="ghost" size="icon" onClick={() => openModal(account, 'decrypt')} className="group hover:text-foreground transition-colors">
+                  <Button variant="ghost" size="icon" onClick={() => openModal(account, 'decrypt')} className="group hover:text-black transition-colors">
                     <Lock className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={() => openModal(account, 'copy')} className="group hover:text-foreground transition-colors">
+                  <Button variant="ghost" size="icon" onClick={() => openModal(account, 'copy')} className="group hover:text-black transition-colors">
                     <Copy className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={() => openEditDialog(account)} className="group hover:text-foreground transition-colors">
+                  <Button variant="ghost" size="icon" onClick={() => openEditDialog(account)} className="group hover:text-black transition-colors">
                     <Pencil className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={() => deleteAccount(account.id)} className="group hover:text-destructive transition-colors">
+                  <Button variant="ghost" size="icon" onClick={() => deleteAccount(account.id)} className="group hover:text-black transition-colors">
                     <Trash2 className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
                   </Button>
                 </TableCell>
