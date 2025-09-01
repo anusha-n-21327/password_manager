@@ -22,7 +22,7 @@ export default {
       fontFamily: {
         sans: ["'Open Sans'", ...defaultTheme.fontFamily.sans],
         heading: ["'Lato'", ...defaultTheme.fontFamily.sans],
-        mono: ["'JetBrains Mono'", ...defaultTheme.fontFamily.mono],
+        mono: ["'Roboto Mono'", ...defaultTheme.fontFamily.mono],
       },
       colors: {
         border: "hsl(var(--border))",
