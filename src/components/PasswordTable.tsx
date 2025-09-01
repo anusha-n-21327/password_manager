@@ -81,7 +81,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
         <DecryptModal
           isOpen={modalState.open}
           onClose={() => setModalState({ ...modalState, open: false })}
-          onSuccess={handleCopySuccess}
+          onCopySuccess={handleCopySuccess}
           accountToVerify={modalState.account}
           action={modalState.action}
         />

@@ -9,12 +9,12 @@ import { showError, showSuccess } from '@/utils/toast';
 interface DecryptModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: (password: string) => void;
+  onCopySuccess: (password: string) => void;
   accountToVerify: Account;
   action: 'decrypt' | 'copy';
 }
 
-export const DecryptModal = ({ isOpen, onClose, onSuccess, accountToVerify, action }: DecryptModalProps) => {
+export const DecryptModal = ({ isOpen, onClose, onCopySuccess, accountToVerify, action }: DecryptModalProps) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [decryptedPassword, setDecryptedPassword] = useState<string | null>(null);
@@ -33,10 +33,11 @@ export const DecryptModal = ({ isOpen, onClose, onSuccess, accountToVerify, acti
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (verifyMasterPassword(password)) {
+      const plainPassword = accountToVerify.password;
       if (action === 'decrypt') {
-        setDecryptedPassword(accountToVerify.password);
+        setDecryptedPassword(plainPassword);
       } else {
-        onSuccess(accountToVerify.password);
+        onCopySuccess(plainPassword);
       }
     } else {
       showError('Incorrect master password.');
