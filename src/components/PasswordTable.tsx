@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { Account, useVault } from '@/context/VaultContext';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Card } from '@/components/ui/card';
 import { DecryptModal } from './DecryptModal';
-import { Copy, Lock, Trash2, Pencil } from 'lucide-react';
+import { Copy, Lock, Trash2 } from 'lucide-react';
 import { showSuccess } from '@/utils/toast';
 
 interface PasswordTableProps {
