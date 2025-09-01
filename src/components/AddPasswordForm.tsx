@@ -20,7 +20,7 @@ export const AddPasswordForm = ({ onSave }: AddPasswordFormProps) => {
   const generatePassword = () => {
     const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
     const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const numberChars = '0123456789';
+    const numberChars = '01230123456789';
     const symbolChars = '!@#$%^&*()_+~`|}{[]:;?><,./-=';
     const charPool = lowerChars + upperChars + numberChars + symbolChars;
     let newPassword = '';
@@ -42,7 +42,7 @@ export const AddPasswordForm = ({ onSave }: AddPasswordFormProps) => {
   return (
     <Card className="bg-card border-primary/20">
       <CardHeader>
-        <CardTitle className="text-primary">Add New Password</CardTitle>
+        <CardTitle className="text-primary font-heading">Add New Password</CardTitle>
         <CardDescription>Enter the details for the new account.</CardDescription>
       </CardHeader>
       <CardContent>

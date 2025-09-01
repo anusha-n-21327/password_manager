@@ -21,6 +21,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ["'Fira Code'", ...defaultTheme.fontFamily.sans],
+        heading: ["'Poppins'", ...defaultTheme.fontFamily.sans],
       },
       colors: {
         border: "hsl(var(--border))",

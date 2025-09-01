@@ -43,7 +43,7 @@ export const PasswordList = ({ accounts, searchTerm }: PasswordListProps) => {
   if (filteredAccounts.length === 0) {
     return (
       <div className="text-center py-16 border-2 border-dashed border-primary/20 rounded-lg">
-        <h2 className="text-xl font-semibold text-foreground">Your vault is empty or no results found.</h2>
+        <h2 className="text-xl font-semibold text-foreground font-heading">Your vault is empty or no results found.</h2>
         <p className="text-muted-foreground mt-2">Try adding a new account or refining your search.</p>
       </div>
     );
@@ -56,7 +56,7 @@ export const PasswordList = ({ accounts, searchTerm }: PasswordListProps) => {
           <Card key={account.id} className="bg-card border-primary/20">
             <CardContent className="p-4 flex items-center justify-between">
               <div className="flex-1">
-                <h3 className="font-bold text-lg text-foreground">{account.website}</h3>
+                <h3 className="font-bold text-lg text-foreground font-heading">{account.website}</h3>
                 <p className="text-sm text-muted-foreground">{account.username}</p>
                 <p className="text-sm font-mono text-primary mt-2 tracking-wider">
                   {visiblePasswords.includes(account.id) ? account.password : '••••••••••••••••'}
@@ -88,7 +88,7 @@ export const PasswordList = ({ accounts, searchTerm }: PasswordListProps) => {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[425px] bg-card border-primary/20">
           <DialogHeader>
-            <DialogTitle className="text-primary">Edit Account</DialogTitle>
+            <DialogTitle className="text-primary font-heading">Edit Account</DialogTitle>
           </DialogHeader>
           {editingAccount && (
             <EditPasswordForm

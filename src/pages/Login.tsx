@@ -26,7 +26,7 @@ const Login = () => {
           <div className="mx-auto bg-background rounded-full p-3 w-fit mb-4 border border-primary/30">
             <KeyRound className="h-8 w-8 text-primary" />
           </div>
-          <CardTitle className="text-2xl text-primary">
+          <CardTitle className="text-2xl text-primary font-heading">
             {vaultExists ? 'Unlock Vault' : 'Create Your Vault'}
           </CardTitle>
           <CardDescription>
