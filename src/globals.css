@@ -4,58 +4,58 @@
 
 @layer base {
   :root {
-    --background: 270 100% 10%; /* #1A0033 */
+    --background: 212 78% 11%; /* #0A192F */
     --foreground: 0 0% 100%; /* #FFFFFF */
 
-    --card: 270 100% 13%; /* #210042 */
+    --card: 214 60% 16%; /* #112240 */
     --card-foreground: 0 0% 100%;
 
-    --popover: 270 100% 13%;
+    --popover: 214 60% 16%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 274 79% 61%; /* #9D4EDD */
-    --primary-foreground: 270 100% 10%;
+    --primary: 213 72% 59%; /* #4A90E2 */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 275 88% 88%; /* #E0C3FC */
-    --secondary-foreground: 270 100% 10%;
+    --secondary: 164 100% 70%; /* #64FFDA */
+    --secondary-foreground: 212 78% 11%;
 
-    --muted: 270 100% 13%;
-    --muted-foreground: 275 88% 88%;
+    --muted: 214 60% 16%;
+    --muted-foreground: 225 55% 91%; /* #CCD6F6 */
 
-    --accent: 274 79% 61%;
-    --accent-foreground: 270 100% 10%;
+    --accent: 164 100% 70%;
+    --accent-foreground: 212 78% 11%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 274 79% 41%;
-    --input: 270 100% 15%;
-    --ring: 274 79% 61%;
+    --border: 214 47% 18%;
+    --input: 214 60% 16%;
+    --ring: 164 100% 70%; /* Aqua for focus glow */
 
     --radius: 0.5rem;
   }
 
   .dark {
     /* The root is already dark theme, so dark can be the same */
-    --background: 270 100% 10%;
+    --background: 212 78% 11%;
     --foreground: 0 0% 100%;
-    --card: 270 100% 13%;
+    --card: 214 60% 16%;
     --card-foreground: 0 0% 100%;
-    --popover: 270 100% 13%;
+    --popover: 214 60% 16%;
     --popover-foreground: 0 0% 100%;
-    --primary: 274 79% 61%;
-    --primary-foreground: 270 100% 10%;
-    --secondary: 275 88% 88%;
-    --secondary-foreground: 270 100% 10%;
-    --muted: 270 100% 13%;
-    --muted-foreground: 275 88% 88%;
-    --accent: 274 79% 61%;
-    --accent-foreground: 270 100% 10%;
+    --primary: 213 72% 59%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 164 100% 70%;
+    --secondary-foreground: 212 78% 11%;
+    --muted: 214 60% 16%;
+    --muted-foreground: 225 55% 91%;
+    --accent: 164 100% 70%;
+    --accent-foreground: 212 78% 11%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 274 79% 41%;
-    --input: 270 100% 15%;
-    --ring: 274 79% 61%;
+    --border: 214 47% 18%;
+    --input: 214 60% 16%;
+    --ring: 164 100% 70%;
   }
 }
 
