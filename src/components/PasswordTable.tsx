@@ -89,21 +89,37 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
                           <MoreVertical className="h-5 w-5" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="bg-card border-primary/20">
-                        <DropdownMenuItem onClick={() => openModal(account, 'decrypt')} className="focus:bg-primary/10">
+                      <DropdownMenuContent align="end" className="bg-card border-primary/20 animate-scale-in">
+                        <DropdownMenuItem 
+                          onClick={() => openModal(account, 'decrypt')} 
+                          className="focus:bg-primary/10 opacity-0 animate-fade-in-up"
+                          style={{ animationDelay: '50ms' }}
+                        >
                           <Lock className="mr-2 h-4 w-4" />
                           <span>View/Decrypt</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => openModal(account, 'copy')} className="focus:bg-primary/10">
+                        <DropdownMenuItem 
+                          onClick={() => openModal(account, 'copy')} 
+                          className="focus:bg-primary/10 opacity-0 animate-fade-in-up"
+                          style={{ animationDelay: '100ms' }}
+                        >
                           <Copy className="mr-2 h-4 w-4" />
                           <span>Copy Password</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => openEditDialog(account)} className="focus:bg-primary/10">
+                        <DropdownMenuItem 
+                          onClick={() => openEditDialog(account)} 
+                          className="focus:bg-primary/10 opacity-0 animate-fade-in-up"
+                          style={{ animationDelay: '150ms' }}
+                        >
                           <Pencil className="mr-2 h-4 w-4" />
                           <span>Edit</span>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator className="bg-primary/20" />
-                        <DropdownMenuItem onClick={() => deleteAccount(account.id)} className="text-destructive focus:text-destructive focus:bg-destructive/10">
+                        <DropdownMenuItem 
+                          onClick={() => deleteAccount(account.id)} 
+                          className="text-destructive focus:text-destructive focus:bg-destructive/10 opacity-0 animate-fade-in-up"
+                          style={{ animationDelay: '200ms' }}
+                        >
                           <Trash2 className="mr-2 h-4 w-4" />
                           <span>Delete</span>
                         </DropdownMenuItem>
