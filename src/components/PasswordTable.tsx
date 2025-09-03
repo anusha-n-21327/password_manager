@@ -92,7 +92,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
                       <DropdownMenuContent align="end" className="bg-card border-primary/20 animate-scale-in">
                         <DropdownMenuItem 
                           onClick={() => openModal(account, 'decrypt')} 
-                          className="focus:bg-primary/10 opacity-0 animate-fade-in-up"
+                          className="focus:bg-primary/10 focus:text-foreground opacity-0 animate-fade-in-up"
                           style={{ animationDelay: '50ms' }}
                         >
                           <Lock className="mr-2 h-4 w-4" />
@@ -100,7 +100,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
                         </DropdownMenuItem>
                         <DropdownMenuItem 
                           onClick={() => openModal(account, 'copy')} 
-                          className="focus:bg-primary/10 opacity-0 animate-fade-in-up"
+                          className="focus:bg-primary/10 focus:text-foreground opacity-0 animate-fade-in-up"
                           style={{ animationDelay: '100ms' }}
                         >
                           <Copy className="mr-2 h-4 w-4" />
@@ -108,7 +108,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
                         </DropdownMenuItem>
                         <DropdownMenuItem 
                           onClick={() => openEditDialog(account)} 
-                          className="focus:bg-primary/10 opacity-0 animate-fade-in-up"
+                          className="focus:bg-primary/10 focus:text-foreground opacity-0 animate-fade-in-up"
                           style={{ animationDelay: '150ms' }}
                         >
                           <Pencil className="mr-2 h-4 w-4" />
