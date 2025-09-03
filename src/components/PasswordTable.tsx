@@ -85,7 +85,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="hover:bg-primary/10">
+                        <Button variant="ghost" size="icon" className="hover:bg-primary/10 hover:text-foreground">
                           <MoreVertical className="h-5 w-5" />
                         </Button>
                       </DropdownMenuTrigger>
