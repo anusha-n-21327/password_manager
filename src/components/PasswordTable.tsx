@@ -7,7 +7,8 @@ import { Card } from '@/components/ui/card';
 import { DecryptModal } from './DecryptModal';
 import { EditPasswordForm } from './EditPasswordForm';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Copy, Lock, Trash2, Pencil } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Copy, Lock, Trash2, Pencil, MoreVertical } from 'lucide-react';
 import { showSuccess } from '@/utils/toast';
 import { getIconForWebsite } from '@/lib/icon-map';
 
@@ -82,18 +83,32 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
                     {'••••••••••••'}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" onClick={() => openModal(account, 'decrypt')} className="group hover:text-black transition-colors">
-                      <Lock className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={() => openModal(account, 'copy')} className="group hover:text-black transition-colors">
-                      <Copy className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={() => openEditDialog(account)} className="group hover:text-black transition-colors">
-                      <Pencil className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={() => deleteAccount(account.id)} className="group hover:text-black transition-colors">
-                      <Trash2 className="h-5 w-5 transition-transform duration-200 ease-in-out group-hover:scale-125" />
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="hover:bg-primary/10">
+                          <MoreVertical className="h-5 w-5" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="bg-card border-primary/20">
+                        <DropdownMenuItem onClick={() => openModal(account, 'decrypt')} className="focus:bg-primary/10">
+                          <Lock className="mr-2 h-4 w-4" />
+                          <span>View/Decrypt</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => openModal(account, 'copy')} className="focus:bg-primary/10">
+                          <Copy className="mr-2 h-4 w-4" />
+                          <span>Copy Password</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => openEditDialog(account)} className="focus:bg-primary/10">
+                          <Pencil className="mr-2 h-4 w-4" />
+                          <span>Edit</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator className="bg-primary/20" />
+                        <DropdownMenuItem onClick={() => deleteAccount(account.id)} className="text-destructive focus:text-destructive focus:bg-destructive/10">
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          <span>Delete</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               );
