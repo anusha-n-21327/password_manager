@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card';
 import { EditPasswordForm } from './EditPasswordForm';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Copy, Trash2, Pencil, MoreVertical } from 'lucide-react';
+import { Copy, Trash2, Pencil, MoreVertical, Eye, EyeOff } from 'lucide-react';
 import { showSuccess } from '@/utils/toast';
 import { getIconForWebsite } from '@/lib/icon-map';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -20,6 +20,7 @@ interface PasswordTableProps {
 export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
   const { deleteAccount } = useVault();
   const [editState, setEditState] = useState<{ open: boolean; account: Account | null }>({ open: false, account: null });
+  const [revealedPasswordIds, setRevealedPasswordIds] = useState<Set<string>>(new Set());
   const isMobile = useIsMobile();
 
   const filteredAccounts = accounts.filter(
@@ -35,6 +36,18 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
 
   const openEditDialog = (account: Account) => {
     setEditState({ open: true, account });
+  };
+
+  const togglePasswordVisibility = (id: string) => {
+    setRevealedPasswordIds(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
   };
 
   if (filteredAccounts.length === 0) {
@@ -54,6 +67,17 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-card border-primary/20 animate-scale-in">
+        <DropdownMenuItem 
+          onClick={() => togglePasswordVisibility(account.id)}
+          className="focus:bg-secondary/20 focus:text-foreground"
+        >
+          {revealedPasswordIds.has(account.id) ? (
+            <EyeOff className="mr-2 h-4 w-4" />
+          ) : (
+            <Eye className="mr-2 h-4 w-4" />
+          )}
+          <span>{revealedPasswordIds.has(account.id) ? 'Hide' : 'View'} Password</span>
+        </DropdownMenuItem>
         <DropdownMenuItem 
           onClick={() => handleCopy(account.password_text)} 
           className="focus:bg-secondary/20 focus:text-foreground"
@@ -93,11 +117,14 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="flex justify-between items-start gap-4">
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-3 flex-1 overflow-hidden">
                     <Icon className="h-7 w-7 text-primary flex-shrink-0 mt-1" />
-                    <div className="overflow-hidden">
+                    <div className="overflow-hidden flex-1">
                       <h3 className="font-bold text-lg font-heading truncate">{account.website}</h3>
                       <p className="text-muted-foreground break-all">{account.username}</p>
+                      <p className="font-mono tracking-wider text-primary mt-2 break-all">
+                        {revealedPasswordIds.has(account.id) ? account.password_text : '••••••••••••'}
+                      </p>
                     </div>
                   </div>
                   {renderActions(account)}
@@ -134,7 +161,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
                     </TableCell>
                     <TableCell className="text-muted-foreground">{account.username}</TableCell>
                     <TableCell className="font-mono tracking-wider text-primary">
-                      {'••••••••••••'}
+                      {revealedPasswordIds.has(account.id) ? account.password_text : '••••••••••••'}
                     </TableCell>
                     <TableCell className="text-right">
                       {renderActions(account)}
