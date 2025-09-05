@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card';
 import { EditPasswordForm } from './EditPasswordForm';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Copy, Trash2, Pencil, MoreVertical, Eye, EyeOff } from 'lucide-react';
+import { Copy, Trash2, Pencil, MoreVertical, Eye } from 'lucide-react';
 import { showSuccess } from '@/utils/toast';
 import { getIconForWebsite } from '@/lib/icon-map';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -21,8 +21,7 @@ interface PasswordTableProps {
 export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
   const { deleteAccount } = useVault();
   const [editState, setEditState] = useState<{ open: boolean; account: Account | null }>({ open: false, account: null });
-  const [revealedPasswordIds, setRevealedPasswordIds] = useState<Set<string>>(new Set());
-  const [verificationState, setVerificationState] = useState<{ open: boolean; accountIdToReveal: string | null }>({ open: false, accountIdToReveal: null });
+  const [accountToView, setAccountToView] = useState<Account | null>(null);
   const isMobile = useIsMobile();
 
   const filteredAccounts = accounts.filter(
@@ -38,33 +37,6 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
 
   const openEditDialog = (account: Account) => {
     setEditState({ open: true, account });
-  };
-
-  const togglePasswordVisibility = (id: string) => {
-    setRevealedPasswordIds(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
-      return newSet;
-    });
-  };
-
-  const handleViewClick = (accountId: string) => {
-    if (revealedPasswordIds.has(accountId)) {
-      togglePasswordVisibility(accountId);
-    } else {
-      setVerificationState({ open: true, accountIdToReveal: accountId });
-    }
-  };
-
-  const handleVerificationSuccess = () => {
-    if (verificationState.accountIdToReveal) {
-      togglePasswordVisibility(verificationState.accountIdToReveal);
-    }
-    setVerificationState({ open: false, accountIdToReveal: null });
   };
 
   if (filteredAccounts.length === 0) {
@@ -85,15 +57,11 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-card border-primary/20 animate-scale-in">
         <DropdownMenuItem 
-          onClick={() => handleViewClick(account.id)}
+          onClick={() => setAccountToView(account)}
           className="focus:bg-secondary/20 focus:text-foreground"
         >
-          {revealedPasswordIds.has(account.id) ? (
-            <EyeOff className="mr-2 h-4 w-4" />
-          ) : (
-            <Eye className="mr-2 h-4 w-4" />
-          )}
-          <span>{revealedPasswordIds.has(account.id) ? 'Hide' : 'View'} Password</span>
+          <Eye className="mr-2 h-4 w-4" />
+          <span>View Password</span>
         </DropdownMenuItem>
         <DropdownMenuItem 
           onClick={() => handleCopy(account.password_text)} 
@@ -140,7 +108,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
                       <h3 className="font-bold text-lg font-heading truncate">{account.website}</h3>
                       <p className="text-muted-foreground break-all">{account.username}</p>
                       <p className="font-mono tracking-wider text-primary mt-2 break-all">
-                        {revealedPasswordIds.has(account.id) ? account.password_text : '••••••••••••'}
+                        ••••••••••••
                       </p>
                     </div>
                   </div>
@@ -178,7 +146,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
                     </TableCell>
                     <TableCell className="text-muted-foreground">{account.username}</TableCell>
                     <TableCell className="font-mono tracking-wider text-primary">
-                      {revealedPasswordIds.has(account.id) ? account.password_text : '••••••••••••'}
+                      ••••••••••••
                     </TableCell>
                     <TableCell className="text-right">
                       {renderActions(account)}
@@ -192,9 +160,9 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
       )}
       
       <PasswordVerificationDialog
-        open={verificationState.open}
-        onOpenChange={(isOpen) => setVerificationState({ ...verificationState, open: isOpen })}
-        onSuccess={handleVerificationSuccess}
+        open={!!accountToView}
+        onOpenChange={(isOpen) => !isOpen && setAccountToView(null)}
+        account={accountToView}
       />
 
       {editState.account && (
