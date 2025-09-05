@@ -4,11 +4,10 @@ import { Account, useVault } from '@/context/VaultContext';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card } from '@/components/ui/card';
-import { DecryptModal } from './DecryptModal';
 import { EditPasswordForm } from './EditPasswordForm';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Copy, Lock, Trash2, Pencil, MoreVertical } from 'lucide-react';
+import { Copy, Trash2, Pencil, MoreVertical } from 'lucide-react';
 import { showSuccess } from '@/utils/toast';
 import { getIconForWebsite } from '@/lib/icon-map';
 
@@ -19,7 +18,6 @@ interface PasswordTableProps {
 
 export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
   const { deleteAccount } = useVault();
-  const [modalState, setModalState] = useState<{ open: boolean; account: Account | null; action: 'decrypt' | 'copy' }>({ open: false, account: null, action: 'decrypt' });
   const [editState, setEditState] = useState<{ open: boolean; account: Account | null }>({ open: false, account: null });
 
   const filteredAccounts = accounts.filter(
@@ -28,14 +26,9 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
       (account.username && typeof account.username === 'string' && account.username.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  const handleCopySuccess = (password: string) => {
+  const handleCopy = (password: string) => {
     navigator.clipboard.writeText(password);
     showSuccess('Password copied to clipboard!');
-    setModalState({ open: false, account: null, action: 'decrypt' }); // Close modal
-  };
-
-  const openModal = (account: Account, action: 'decrypt' | 'copy') => {
-    setModalState({ open: true, account, action });
   };
 
   const openEditDialog = (account: Account) => {
@@ -91,15 +84,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="bg-card border-primary/20 animate-scale-in">
                         <DropdownMenuItem 
-                          onClick={() => openModal(account, 'decrypt')} 
-                          className="focus:bg-secondary/20 focus:text-foreground opacity-0 animate-fade-in-up"
-                          style={{ animationDelay: '50ms' }}
-                        >
-                          <Lock className="mr-2 h-4 w-4" />
-                          <span>View/Decrypt</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem 
-                          onClick={() => openModal(account, 'copy')} 
+                          onClick={() => handleCopy(account.password_text)} 
                           className="focus:bg-secondary/20 focus:text-foreground opacity-0 animate-fade-in-up"
                           style={{ animationDelay: '100ms' }}
                         >
@@ -133,16 +118,6 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
         </Table>
       </Card>
       
-      {modalState.account && (
-        <DecryptModal
-          isOpen={modalState.open}
-          onClose={() => setModalState({ ...modalState, open: false })}
-          onCopySuccess={handleCopySuccess}
-          accountToVerify={modalState.account}
-          action={modalState.action}
-        />
-      )}
-
       {editState.account && (
         <Dialog open={editState.open} onOpenChange={(isOpen) => setEditState({ ...editState, open: isOpen })}>
           <DialogContent className="sm:max-w-[425px] bg-card border-primary/20 animate-scale-in">

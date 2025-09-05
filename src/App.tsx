@@ -6,8 +6,8 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 
 const AppContent = () => {
-  const { isUnlocked } = useVault();
-  return isUnlocked ? <Dashboard /> : <Login />;
+  const { session } = useVault();
+  return session ? <Dashboard /> : <Login />;
 };
 
 const App = () => (

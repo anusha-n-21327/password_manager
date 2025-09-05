@@ -21,14 +21,14 @@ export const EditPasswordForm = ({ account, onSave }: EditPasswordFormProps) => 
     if (account) {
       setWebsite(account.website);
       setUsername(account.username);
-      setPassword(account.password);
+      setPassword(account.password_text);
     }
   }, [account]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (website && username && password) {
-      updateAccount({ id: account.id, website, username, password });
+      await updateAccount({ id: account.id, website, username, password_text: password });
       onSave();
     }
   };

@@ -16,10 +16,10 @@ export const AddPasswordForm = ({ onSave }: AddPasswordFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const { addAccount } = useVault();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (website && username && password) {
-      addAccount({ website, username, password });
+      await addAccount({ website, username, password_text: password });
       onSave();
     }
   };

@@ -1,116 +1,115 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { encryptAndSave, loadAndDecrypt, vaultExists as checkVaultExists } from '@/lib/crypto';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Session } from '@supabase/supabase-js';
 import { showError, showSuccess } from '@/utils/toast';
 
 export interface Account {
   id: string;
   website: string;
   username: string;
-  password: string;
+  password_text: string;
 }
 
 interface VaultContextType {
-  isUnlocked: boolean;
+  session: Session | null;
   accounts: Account[];
-  vaultExists: boolean;
-  login: (masterPassword: string) => void;
-  logout: () => void;
-  addAccount: (account: Omit<Account, 'id'>) => void;
-  updateAccount: (updatedAccount: Account) => void;
-  deleteAccount: (id: string) => void;
-  resetVault: () => void;
-  verifyMasterPassword: (password: string) => boolean;
+  addAccount: (account: Omit<Account, 'id'>) => Promise<void>;
+  updateAccount: (updatedAccount: Account) => Promise<void>;
+  deleteAccount: (id: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const VaultContext = createContext<VaultContextType | undefined>(undefined);
 
 export const VaultProvider = ({ children }: { children: ReactNode }) => {
-  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
   const [accounts, setAccounts] = useState<Account[]>([]);
-  const [masterPassword, setMasterPassword] = useState('');
-  const [vaultExists, setVaultExists] = useState(checkVaultExists());
 
-  const login = (password: string) => {
-    if (vaultExists) {
-      const decryptedData = loadAndDecrypt(password);
-      if (decryptedData) {
-        setAccounts(decryptedData);
-        setIsUnlocked(true);
-        setMasterPassword(password);
-        showSuccess('Vault unlocked!');
-      } else {
-        showError('Incorrect master password.');
-      }
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (session) {
+      fetchAccounts();
     } else {
-      // First time setup
       setAccounts([]);
-      setIsUnlocked(true);
-      setMasterPassword(password);
-      encryptAndSave([], password);
-      setVaultExists(true);
-      showSuccess('Vault created and unlocked!');
     }
-  };
+  }, [session]);
 
-  const logout = () => {
-    setIsUnlocked(false);
-    setAccounts([]);
-    setMasterPassword('');
-  };
+  const fetchAccounts = async () => {
+    if (!session) return;
+    const { data, error } = await supabase
+      .from('passwords')
+      .select('id, website, username, password_text')
+      .order('created_at', { ascending: false });
 
-  const saveData = (updatedAccounts: Account[]) => {
-    if (encryptAndSave(updatedAccounts, masterPassword)) {
-      setAccounts(updatedAccounts);
+    if (error) {
+      showError('Could not fetch passwords.');
+      console.error(error);
     } else {
-      showError('Failed to save data.');
+      setAccounts(data || []);
     }
   };
 
-  const addAccount = (account: Omit<Account, 'id'>) => {
-    const newAccount = { ...account, id: crypto.randomUUID() };
-    const updatedAccounts = [...accounts, newAccount];
-    saveData(updatedAccounts);
-    showSuccess('Account added.');
+  const addAccount = async (account: Omit<Account, 'id'>) => {
+    if (!session) return;
+    const { error } = await supabase.from('passwords').insert({ ...account, user_id: session.user.id });
+    if (error) {
+      showError('Failed to add account.');
+    } else {
+      showSuccess('Account added.');
+      fetchAccounts();
+    }
   };
 
-  const updateAccount = (updatedAccount: Account) => {
-    const updatedAccounts = accounts.map(acc =>
-      acc.id === updatedAccount.id ? updatedAccount : acc
-    );
-    saveData(updatedAccounts);
-    showSuccess('Account updated.');
+  const updateAccount = async (updatedAccount: Account) => {
+    const { error } = await supabase
+      .from('passwords')
+      .update({ 
+        website: updatedAccount.website, 
+        username: updatedAccount.username, 
+        password_text: updatedAccount.password_text 
+      })
+      .eq('id', updatedAccount.id);
+    
+    if (error) {
+      showError('Failed to update account.');
+    } else {
+      showSuccess('Account updated.');
+      fetchAccounts();
+    }
   };
 
-  const deleteAccount = (id: string) => {
-    const updatedAccounts = accounts.filter(acc => acc.id !== id);
-    saveData(updatedAccounts);
-    showSuccess('Account deleted.');
+  const deleteAccount = async (id: string) => {
+    const { error } = await supabase.from('passwords').delete().eq('id', id);
+    if (error) {
+      showError('Failed to delete account.');
+    } else {
+      showSuccess('Account deleted.');
+      fetchAccounts();
+    }
   };
 
-  const resetVault = () => {
-    localStorage.removeItem('password-manager-vault');
-    setIsUnlocked(false);
-    setAccounts([]);
-    setMasterPassword('');
-    setVaultExists(false);
-    showSuccess('Vault has been reset. You can now create a new one.');
-  };
-
-  const verifyMasterPassword = (password: string) => {
-    return password === masterPassword;
+  const logout = async () => {
+    await supabase.auth.signOut();
   };
 
   const value = {
-    isUnlocked,
+    session,
     accounts,
-    vaultExists,
-    login,
-    logout,
     addAccount,
     updateAccount,
     deleteAccount,
-    resetVault,
-    verifyMasterPassword,
+    logout,
   };
 
   return <VaultContext.Provider value={value}>{children}</VaultContext.Provider>;

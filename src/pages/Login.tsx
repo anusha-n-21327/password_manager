@@ -1,25 +1,11 @@
-import { useState } from 'react';
-import { useVault } from '@/context/VaultContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Auth } from '@supabase/auth-ui-react';
+import { ThemeSupa } from '@supabase/auth-ui-shared';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { KeyRound, Eye, EyeOff } from 'lucide-react';
+import { KeyRound } from 'lucide-react';
 import { Footer } from '@/components/Footer';
 
 const Login = () => {
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const { login, vaultExists, resetVault } = useVault();
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password) {
-      login(password);
-    }
-  };
-
-  const toggleShowPassword = () => setShowPassword(!showPassword);
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-background">
       <main className="flex-grow flex items-center justify-center w-full">
@@ -32,45 +18,41 @@ const Login = () => {
               Secure Your Digital Life
             </CardTitle>
             <CardDescription>
-              {vaultExists
-                ? 'Enter your master password to unlock your encrypted vault.'
-                : 'Create a single master password to protect all your accounts.'}
+              Sign in to access your encrypted vault from any device.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="relative">
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Master Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="bg-background border-primary/30 text-foreground focus:ring-primary pr-10 font-mono"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={toggleShowPassword}
-                  className="absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground hover:text-foreground"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
-              </div>
-              <Button 
-                type="submit" 
-                className="w-full bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:shadow-[0_0_15px_hsl(var(--secondary))] transition-shadow"
-              >
-                {vaultExists ? 'Unlock' : 'Create'}
-              </Button>
-            </form>
-            {vaultExists && (
-              <div className="mt-4 text-center">
-                <Button variant="link" className="text-sm text-muted-foreground" onClick={resetVault}>
-                  Forgot Password? Reset Vault
-                </Button>
-              </div>
-            )}
+            <Auth
+              supabaseClient={supabase}
+              appearance={{
+                theme: ThemeSupa,
+                variables: {
+                  default: {
+                    colors: {
+                      brand: 'hsl(var(--primary))',
+                      brandAccent: 'hsl(var(--secondary))',
+                      brandButtonText: 'white',
+                      defaultButtonBackground: 'hsl(var(--card))',
+                      defaultButtonBackgroundHover: 'hsl(var(--muted))',
+                      defaultButtonBorder: 'hsl(var(--border))',
+                      inputBackground: 'hsl(var(--background))',
+                      inputBorder: 'hsl(var(--border))',
+                      inputBorderHover: 'hsl(var(--primary))',
+                      inputText: 'white',
+                      inputLabelText: 'hsl(var(--muted-foreground))',
+                      inputPlaceholder: 'hsl(var(--muted-foreground))',
+                    },
+                    radii: {
+                      borderRadiusButton: 'var(--radius)',
+                      buttonBorderRadius: 'var(--radius)',
+                      inputBorderRadius: 'var(--radius)',
+                    },
+                  },
+                },
+              }}
+              providers={[]}
+              theme="dark"
+            />
           </CardContent>
         </Card>
       </main>
