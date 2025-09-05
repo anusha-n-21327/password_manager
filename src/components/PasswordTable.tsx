@@ -10,6 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Copy, Trash2, Pencil, MoreVertical } from 'lucide-react';
 import { showSuccess } from '@/utils/toast';
 import { getIconForWebsite } from '@/lib/icon-map';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface PasswordTableProps {
   accounts: Account[];
@@ -19,6 +20,7 @@ interface PasswordTableProps {
 export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
   const { deleteAccount } = useVault();
   const [editState, setEditState] = useState<{ open: boolean; account: Account | null }>({ open: false, account: null });
+  const isMobile = useIsMobile();
 
   const filteredAccounts = accounts.filter(
     (account) =>
@@ -44,79 +46,106 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
     );
   }
 
+  const renderActions = (account: Account) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="hover:bg-primary/10 hover:text-foreground data-[state=open]:bg-primary/10">
+          <MoreVertical className="h-5 w-5" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="bg-card border-primary/20 animate-scale-in">
+        <DropdownMenuItem 
+          onClick={() => handleCopy(account.password_text)} 
+          className="focus:bg-secondary/20 focus:text-foreground"
+        >
+          <Copy className="mr-2 h-4 w-4" />
+          <span>Copy Password</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem 
+          onClick={() => openEditDialog(account)} 
+          className="focus:bg-secondary/20 focus:text-foreground"
+        >
+          <Pencil className="mr-2 h-4 w-4" />
+          <span>Edit</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-primary/20" />
+        <DropdownMenuItem 
+          onClick={() => deleteAccount(account.id)} 
+          className="text-destructive focus:bg-destructive/20 focus:text-destructive"
+        >
+          <Trash2 className="mr-2 h-4 w-4" />
+          <span>Delete</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
   return (
     <>
-      <Card className="bg-card border-primary/20">
-        <Table>
-          <TableHeader>
-            <TableRow className="border-b-primary/20">
-              <TableHead className="text-foreground font-heading">Website/App</TableHead>
-              <TableHead className="text-foreground font-heading">Username</TableHead>
-              <TableHead className="text-foreground font-heading">Password</TableHead>
-              <TableHead className="text-right text-foreground font-heading">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredAccounts.map((account, index) => {
-              const Icon = getIconForWebsite(account.website);
-              return (
-                <TableRow 
-                  key={account.id} 
-                  className="border-b-primary/20 hover:bg-primary/5 opacity-0 animate-fade-in-up"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  <TableCell className="font-medium">
-                    <div className="flex items-center gap-3">
-                      <Icon className="h-5 w-5 text-primary flex-shrink-0" />
-                      <span>{account.website}</span>
+      {isMobile ? (
+        <div className="space-y-4">
+          {filteredAccounts.map((account, index) => {
+            const Icon = getIconForWebsite(account.website);
+            return (
+              <Card 
+                key={account.id} 
+                className="bg-card border-primary/20 p-4 opacity-0 animate-fade-in-up"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                <div className="flex justify-between items-start gap-4">
+                  <div className="flex items-start gap-3">
+                    <Icon className="h-7 w-7 text-primary flex-shrink-0 mt-1" />
+                    <div className="overflow-hidden">
+                      <h3 className="font-bold text-lg font-heading truncate">{account.website}</h3>
+                      <p className="text-muted-foreground break-all">{account.username}</p>
                     </div>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">{account.username}</TableCell>
-                  <TableCell className="font-mono tracking-wider text-primary">
-                    {'••••••••••••'}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="hover:bg-primary/10 hover:text-foreground">
-                          <MoreVertical className="h-5 w-5" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="bg-card border-primary/20 animate-scale-in">
-                        <DropdownMenuItem 
-                          onClick={() => handleCopy(account.password_text)} 
-                          className="focus:bg-secondary/20 focus:text-foreground opacity-0 animate-fade-in-up"
-                          style={{ animationDelay: '100ms' }}
-                        >
-                          <Copy className="mr-2 h-4 w-4" />
-                          <span>Copy Password</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem 
-                          onClick={() => openEditDialog(account)} 
-                          className="focus:bg-secondary/20 focus:text-foreground opacity-0 animate-fade-in-up"
-                          style={{ animationDelay: '150ms' }}
-                        >
-                          <Pencil className="mr-2 h-4 w-4" />
-                          <span>Edit</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator className="bg-primary/20" />
-                        <DropdownMenuItem 
-                          onClick={() => deleteAccount(account.id)} 
-                          className="text-destructive focus:bg-secondary/20 focus:text-foreground opacity-0 animate-fade-in-up"
-                          style={{ animationDelay: '200ms' }}
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          <span>Delete</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Card>
+                  </div>
+                  {renderActions(account)}
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+      ) : (
+        <Card className="bg-card border-primary/20">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-b-primary/20">
+                <TableHead className="text-foreground font-heading">Website/App</TableHead>
+                <TableHead className="text-foreground font-heading">Username</TableHead>
+                <TableHead className="text-foreground font-heading">Password</TableHead>
+                <TableHead className="text-right text-foreground font-heading">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredAccounts.map((account, index) => {
+                const Icon = getIconForWebsite(account.website);
+                return (
+                  <TableRow 
+                    key={account.id} 
+                    className="border-b-primary/20 hover:bg-primary/5 opacity-0 animate-fade-in-up"
+                    style={{ animationDelay: `${index * 50}ms` }}
+                  >
+                    <TableCell className="font-medium">
+                      <div className="flex items-center gap-3">
+                        <Icon className="h-5 w-5 text-primary flex-shrink-0" />
+                        <span>{account.website}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">{account.username}</TableCell>
+                    <TableCell className="font-mono tracking-wider text-primary">
+                      {'••••••••••••'}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {renderActions(account)}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Card>
+      )}
       
       {editState.account && (
         <Dialog open={editState.open} onOpenChange={(isOpen) => setEditState({ ...editState, open: isOpen })}>
