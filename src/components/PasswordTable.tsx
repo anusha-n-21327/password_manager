@@ -11,6 +11,7 @@ import { Copy, Trash2, Pencil, MoreVertical, Eye, EyeOff } from 'lucide-react';
 import { showSuccess } from '@/utils/toast';
 import { getIconForWebsite } from '@/lib/icon-map';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { PasswordVerificationDialog } from './PasswordVerificationDialog';
 
 interface PasswordTableProps {
   accounts: Account[];
@@ -21,6 +22,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
   const { deleteAccount } = useVault();
   const [editState, setEditState] = useState<{ open: boolean; account: Account | null }>({ open: false, account: null });
   const [revealedPasswordIds, setRevealedPasswordIds] = useState<Set<string>>(new Set());
+  const [verificationState, setVerificationState] = useState<{ open: boolean; accountIdToReveal: string | null }>({ open: false, accountIdToReveal: null });
   const isMobile = useIsMobile();
 
   const filteredAccounts = accounts.filter(
@@ -50,6 +52,21 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
     });
   };
 
+  const handleViewClick = (accountId: string) => {
+    if (revealedPasswordIds.has(accountId)) {
+      togglePasswordVisibility(accountId);
+    } else {
+      setVerificationState({ open: true, accountIdToReveal: accountId });
+    }
+  };
+
+  const handleVerificationSuccess = () => {
+    if (verificationState.accountIdToReveal) {
+      togglePasswordVisibility(verificationState.accountIdToReveal);
+    }
+    setVerificationState({ open: false, accountIdToReveal: null });
+  };
+
   if (filteredAccounts.length === 0) {
     return (
       <div className="text-center py-16 border-2 border-dashed border-primary/20 rounded-lg">
@@ -68,7 +85,7 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-card border-primary/20 animate-scale-in">
         <DropdownMenuItem 
-          onClick={() => togglePasswordVisibility(account.id)}
+          onClick={() => handleViewClick(account.id)}
           className="focus:bg-secondary/20 focus:text-foreground"
         >
           {revealedPasswordIds.has(account.id) ? (
@@ -174,6 +191,12 @@ export const PasswordTable = ({ accounts, searchTerm }: PasswordTableProps) => {
         </Card>
       )}
       
+      <PasswordVerificationDialog
+        open={verificationState.open}
+        onOpenChange={(isOpen) => setVerificationState({ ...verificationState, open: isOpen })}
+        onSuccess={handleVerificationSuccess}
+      />
+
       {editState.account && (
         <Dialog open={editState.open} onOpenChange={(isOpen) => setEditState({ ...editState, open: isOpen })}>
           <DialogContent className="sm:max-w-[425px] bg-card border-primary/20 animate-scale-in">
